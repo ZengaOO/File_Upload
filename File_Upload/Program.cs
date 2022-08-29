@@ -11,6 +11,7 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddScoped<IFileUpload, FileUpload>();
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

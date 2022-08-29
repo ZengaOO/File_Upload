@@ -8,22 +8,24 @@ namespace File_Upload.Services
 
     public class FileUpload : IFileUpload
     {
-        private IWebHostEnvironment webHostEnvironment;
-        private readonly ILogger<FileUpload> logger;
+        private IWebHostEnvironment _webHostEnvironment;
+        private readonly ILogger<FileUpload>_logger;
 
-        public FileUpload(IWebHostEnvironment webHostEnvironment, ILogger<FileUpload> logger)
+        public FileUpload(IWebHostEnvironment webHostEnvironment,
+            ILogger<FileUpload> logger)
         {
-            this.webHostEnvironment = webHostEnvironment;
-            this.logger = logger;
+           _webHostEnvironment = webHostEnvironment;
+           _logger = logger;
         }
 
-        public async Task UploadFile(IBrowserFile file)
-        {
-            if (file == null) 
+         public async Task UploadFile(IBrowserFile file)
+        
+         {
+            if (file is not null) 
             {
                 try 
                 {
-                    var uploadPath = Path.Combine(this.webHostEnvironment.WebRootPath,"upload", file.Name);
+                    var uploadPath = Path.Combine(_webHostEnvironment.WebRootPath,"uploads", file.Name);
 
                     using (var stream = file.OpenReadStream())
                     {
@@ -35,7 +37,7 @@ namespace File_Upload.Services
 
                 }catch(Exception ex) 
                 {
-                    this.logger.LogError(ex.ToString());
+                    _logger.LogError(ex.ToString());
                 }
             }
         }

@@ -1,7 +1,8 @@
 ﻿@page "/"
 @using File_Upload.Services;
 @inject IFileUpload fileUpload;
-@*
+
+
 <div class="col-6">
     <h1>File Upload in Blazor</h1>
     <div class="form-group">
@@ -12,28 +13,29 @@
     </div>
     <br/>
     <label>@labelText</label>
-     <br/>
-</div>*@
+        <br/>
+</div>
 
 
 
 
 @code{
-     
-    private string labelText = "";
+ 
     IReadOnlyList<IBrowserFile> selectedFiles;
 
-    //private void OnInputFileChange(InputFileChangeEventArgs e),
-    //{
-    //    selectedFiles = new List<IBrowserFile>();
-    //    selectedFiles = e.GetMultipleFiles();
-    //}
+     private string labelText = "";
+
+    private void OnInputFileChange(InputFileChangeEventArgs e)
+    {
+        selectedFiles = new List<IBrowserFile>();
+       selectedFiles = e.GetMultipleFiles();
+    }
 
     private async Task UploadFiles()
     {
         try
         {
-            if (selectedFiles is not null && selectedFiles.Count>0)
+            if (selectedFiles is not null && selectedFiles.Count > 0)
             {
                 foreach(var file in selectedFiles)
                 {
@@ -41,8 +43,7 @@
                 }
                 labelText = $"Upload of {selectedFiles.Count} files successfull";
             }
-        }
-        catch(Exception ex)
+        } catch(Exception ex)
         {
             labelText = $"Upload Failed due to  {ex.Message}";
         }
