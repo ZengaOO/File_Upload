@@ -42,7 +42,7 @@ namespace File_Upload.Services
                     _logger.LogError(ex.ToString());
                 }
             }
-        }
+         }
 
         public async Task<string> GeneratePreviewUrl(IBrowserFile file)
         {
@@ -61,3 +61,4 @@ namespace File_Upload.Services
         }
     }
 }
+ 
