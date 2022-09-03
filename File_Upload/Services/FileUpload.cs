@@ -4,26 +4,30 @@ namespace File_Upload.Services
     public interface IFileUpload
     {
         Task UploadFile(IBrowserFile file);
+        Task<string> GeneratePreviewUrl(IBrowserFile file);
+
     }
 
     public class FileUpload : IFileUpload
     {
-        private IWebHostEnvironment webHostEnvironment;
-        private readonly ILogger<FileUpload> logger;
+        private IWebHostEnvironment _webHostEnvironment;
+        private readonly ILogger<FileUpload>_logger;
 
-        public FileUpload(IWebHostEnvironment webHostEnvironment, ILogger<FileUpload> logger)
+        public FileUpload(IWebHostEnvironment webHostEnvironment,
+            ILogger<FileUpload> logger)
         {
-            this.webHostEnvironment = webHostEnvironment;
-            this.logger = logger;
+           _webHostEnvironment = webHostEnvironment;
+           _logger = logger;
         }
 
-        public async Task UploadFile(IBrowserFile file)
-        {
-            if (file == null) 
+         public async Task UploadFile(IBrowserFile file)
+        
+         {
+            if (file is not null) 
             {
                 try 
                 {
-                    var uploadPath = Path.Combine(this.webHostEnvironment.WebRootPath,"upload", file.Name);
+                    var uploadPath = Path.Combine(_webHostEnvironment.WebRootPath,"uploads", file.Name);
 
                     using (var stream = file.OpenReadStream())
                     {
@@ -35,9 +39,26 @@ namespace File_Upload.Services
 
                 }catch(Exception ex) 
                 {
-                    this.logger.LogError(ex.ToString());
+                    _logger.LogError(ex.ToString());
                 }
             }
+         }
+
+        public async Task<string> GeneratePreviewUrl(IBrowserFile file)
+        {
+           if(!file.ContentType.Contains("image"))
+           {
+                if(file.ContentType.Contains("pdf"))
+                {
+                    return "images/pdf_logo.png";
+                }
+           }
+
+            var resizedImage = await file.RequestImageFileAsync(file.ContentType, 100, 100);
+                var buffer = new byte[resizedImage.Size];
+                    await resizedImage.OpenReadStream().ReadAsync(buffer);
+            return $"data:{file.ContentType};base64,{Convert.ToBase64String(buffer)}";
         }
     }
 }
+ 
