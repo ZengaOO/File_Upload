@@ -12,11 +12,11 @@
                 <div class="col-2">
                     @if(type[0].Contains("image"))
                     {
-                        <img class="rounded float-left", stc ="@item" width="100" height="100" />
+                        <img class="rounded float-left" stc ="@item" width="100" height="100" />
                     }else{
                         if(type[0].Contains("pdf"))
                         {
-                            <img class="rounded float-left", stc ="images/pdf_logo.png" width="100" height="100" />
+                            <img class="rounded float-left" stc ="images/pdf_logo.png" width="100" height="100" />
                         }
                     }
                     <button @onclick="()=> DownloadFile(item)">Download</button>
